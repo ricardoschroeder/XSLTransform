@@ -9,6 +9,25 @@ namespace XSLTransform
     {
         static void Main(string[] args)
         {
+            bool areFilesValid = true;
+
+            if (!File.Exists(args[0]))
+            {
+                Console.WriteLine($"XML file {args[0]} does not exist.");
+                areFilesValid = false;
+            }
+
+            if (!File.Exists(args[1]))
+            {
+                Console.WriteLine($"XSLT file {args[1]} does not exist.");
+                areFilesValid = false;
+            }
+
+            if (!areFilesValid)
+            {
+                return;
+            }
+
             ApplyTransform(args[0], args[1]);
         }
 
@@ -21,7 +40,7 @@ namespace XSLTransform
                 xmlTextWriter.Formatting = Formatting.Indented;
                 XslCompiledTransform xslTransform = new XslCompiledTransform();
                 xslTransform.Load(xsltFilePath, new XsltSettings(true, true), new XmlUrlResolver());
-                File.SetAttributes(filePath, System.IO.FileAttributes.Normal);
+                File.SetAttributes(filePath, FileAttributes.Normal);
                 xslTransform.Transform(filePath, xmlTextWriter);
                 xmlTextWriter.Close();
             }
